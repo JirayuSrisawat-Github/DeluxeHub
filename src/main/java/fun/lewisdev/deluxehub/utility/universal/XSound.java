@@ -1091,22 +1091,8 @@ public enum XSound {
     public Sound parseSound() {
         com.google.common.base.Optional<Sound> cachedSound = CACHE.getIfPresent(this);
         if (cachedSound != null) return cachedSound.orNull();
-        com.google.common.base.Optional<Sound> sound;
 
-        // Since Sound class doesn't have a getSound() method we'll use Guava so
-        // it can cache it for us.
-        sound = Enums.getIfPresent(Sound.class, this.name());
-
-        if (!sound.isPresent()) {
-            for (String legacy : this.legacy) {
-                sound = Enums.getIfPresent(Sound.class, legacy);
-                if (sound.isPresent()) break;
-            }
-        }
-
-        // Put nulls too, because there's no point of parsing them again if it's going to give us null again.
-        CACHE.put(this, sound);
-        return sound.orNull();
+        return Sound.valueOf(this.name());
     }
 
     /**
